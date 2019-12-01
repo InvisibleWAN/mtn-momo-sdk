@@ -7,4 +7,6 @@ public interface CollectionSdk {
 
     Boolean requestToPay(OpenApiSdkConstants.Deployments deployments,String authorizationToken,String targetEnvironment, String referenceId, String subscriptionKey, String callBackUrl, RequestToPay requestToPay) throws RuntimeException;
 
+
+
 }

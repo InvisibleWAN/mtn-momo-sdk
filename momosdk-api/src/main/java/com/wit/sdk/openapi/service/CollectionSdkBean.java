@@ -41,6 +41,9 @@ public class CollectionSdkBean implements CollectionSdk{
             httpHeaders.setBearerAuth(authorizationToken);
         }
         httpHeaders.set("X-Target-Environment",targetEnvironment);
+        if(callBackUrl != null) {
+            httpHeaders.set("X-Callback-Url", callBackUrl);
+        }
 
 
         String url = null;
