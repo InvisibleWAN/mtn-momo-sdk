@@ -59,6 +59,39 @@ public class OpenApiSdkBean implements OpenApiSdk {
      * @throws RuntimeException
      */
     public Boolean getApiUser(OpenApiSdkConstants.Deployments deployments, String referenceId, String subscriptionKey) throws RuntimeException {
+        Preconditions.checkNotNull(deployments, "Deployment method should be SANDBOX or PRODUCTION");
+        Preconditions.checkNotNull(referenceId, "Reference ID not found");
+        Preconditions.checkNotNull(subscriptionKey, "Subscription Key not found");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.add("Ocp-Apim-Subscription-Key", subscriptionKey);
+
+        String url = null;
+        if (deployments.equals(OpenApiSdkConstants.Deployments.SANDBOX)) {
+            url = OpenApiSdkConstants.Urls.SANDBOX_URL.concat("/v1_0/apiuser").concat("/").concat(referenceId);
+        }
+
+        if (deployments.equals(OpenApiSdkConstants.Deployments.PRODUCTION)) {
+            url = OpenApiSdkConstants.Urls.PRODUCTION_URL.concat("/v1_0/apiuser").concat("/").concat(referenceId);
+        }
+        Preconditions.checkNotNull(url, "Url not found");
+
+        HttpEntity httpEntity = new HttpEntity(httpHeaders);
+        ResponseEntity<Void> responseEntity = this.restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<Void>() {
+        });
+        return responseEntity.getStatusCode() == HttpStatus.OK;
+    }
+
+    /**
+     *
+     * @param deployments
+     * @param referenceId
+     * @param subscriptionKey
+     * @return
+     * @throws RuntimeException
+     */
+    public Boolean createApiUserKey(OpenApiSdkConstants.Deployments deployments, String referenceId, String subscriptionKey) throws RuntimeException {
         return null;
     }
 }

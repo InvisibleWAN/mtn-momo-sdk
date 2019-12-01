@@ -9,4 +9,6 @@ public interface OpenApiSdk {
 
     Boolean getApiUser(OpenApiSdkConstants.Deployments deployments,String referenceId,String subscriptionKey) throws RuntimeException;
 
+    Boolean createApiUserKey(OpenApiSdkConstants.Deployments deployments,String referenceId, String subscriptionKey) throws RuntimeException;
+
 }
