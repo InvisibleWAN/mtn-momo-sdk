@@ -1,6 +1,7 @@
 package com.wit.sdk.openapi.service;
 
 import com.wit.sdk.openapi.constants.OpenApiSdkConstants;
+import com.wit.sdk.openapi.exchange.ApiKey;
 import com.wit.sdk.openapi.exchange.CreateApiUser;
 
 public interface OpenApiSdk {
@@ -9,6 +10,6 @@ public interface OpenApiSdk {
 
     Boolean getApiUser(OpenApiSdkConstants.Deployments deployments,String referenceId,String subscriptionKey) throws RuntimeException;
 
-    Boolean createApiUserKey(OpenApiSdkConstants.Deployments deployments,String referenceId, String subscriptionKey) throws RuntimeException;
+    ApiKey createApiUserKey(OpenApiSdkConstants.Deployments deployments, String referenceId, String subscriptionKey) throws RuntimeException;
 
 }
