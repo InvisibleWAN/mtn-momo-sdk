@@ -3,6 +3,7 @@ package com.wit.sdk.openapi.service;
 import com.google.common.base.Preconditions;
 import com.wit.sdk.openapi.constants.OpenApiSdkConstants;
 import com.wit.sdk.openapi.exchange.RequestToPay;
+import com.wit.sdk.openapi.exchange.RequestToPayStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -60,5 +61,45 @@ public class CollectionSdkBean implements CollectionSdk{
         ResponseEntity<Void> responseEntity = this.restTemplate.exchange(url, HttpMethod.POST, httpEntity, new ParameterizedTypeReference<Void>() {
         });
         return responseEntity.getStatusCode() == HttpStatus.CREATED;
+    }
+
+    /**
+     *
+     * @param deployments
+     * @param authorizationToken
+     * @param targetEnvironment
+     * @param referenceId
+     * @param subscriptionKey
+     * @return
+     * @throws RuntimeException
+     */
+    public RequestToPayStatus requestToPayStatus(OpenApiSdkConstants.Deployments deployments, String authorizationToken, String targetEnvironment, String referenceId, String subscriptionKey) throws RuntimeException {
+        Preconditions.checkNotNull(deployments, "Deployment method should be SANDBOX or PRODUCTION");
+        Preconditions.checkNotNull(referenceId, "Reference ID not found");
+        Preconditions.checkNotNull(subscriptionKey, "Subscription Key not found");
+        Preconditions.checkNotNull(targetEnvironment, "Target Environment ID not found");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("X-Reference-Id", referenceId);
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.add("Ocp-Apim-Subscription-Key", subscriptionKey);
+        if(authorizationToken != null) {
+            httpHeaders.setBearerAuth(authorizationToken);
+        }
+        httpHeaders.set("X-Target-Environment",targetEnvironment);
+
+        String url = null;
+        if (deployments.equals(OpenApiSdkConstants.Deployments.SANDBOX)) {
+            url = OpenApiSdkConstants.Urls.SANDBOX_URL.concat("/collection/v1_0/requesttopay/").concat(referenceId);
+        }
+
+        if (deployments.equals(OpenApiSdkConstants.Deployments.PRODUCTION)) {
+            url = OpenApiSdkConstants.Urls.PRODUCTION_URL.concat("/collection/v1_0/requesttopay/").concat(referenceId);
+        }
+        Preconditions.checkNotNull(url, "Url not found");
+        HttpEntity httpEntity = new HttpEntity(httpHeaders);
+        ResponseEntity<RequestToPayStatus> responseEntity = this.restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<RequestToPayStatus>() {
+        });
+        return responseEntity.getBody();
     }
 }

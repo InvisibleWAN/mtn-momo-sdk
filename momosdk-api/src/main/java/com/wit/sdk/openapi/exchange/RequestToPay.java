@@ -5,13 +5,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class RequestToPay implements Serializable{
 
     @JsonProperty(required = true)
-    private String amount;
+    private BigDecimal amount;
     @JsonProperty(required = true)
     private String currency;
     @JsonProperty(required = true)
@@ -23,11 +24,11 @@ public final class RequestToPay implements Serializable{
     @JsonProperty(required = true)
     private Payer payer;
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -69,29 +70,6 @@ public final class RequestToPay implements Serializable{
 
     public void setPayer(Payer payer) {
         this.payer = payer;
-    }
-
-    private class Payer{
-
-        private String partyId;
-        private String partyIdType;
-
-
-        public String getPartyId() {
-            return partyId;
-        }
-
-        public void setPartyId(String partyId) {
-            this.partyId = partyId;
-        }
-
-        public String getPartyIdType() {
-            return partyIdType;
-        }
-
-        public void setPartyIdType(String partyIdType) {
-            this.partyIdType = partyIdType;
-        }
     }
 
 }
